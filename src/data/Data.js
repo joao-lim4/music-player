@@ -5,7 +5,7 @@ export default {
                 id: 'tavin_mc',
                 url:  require('../content/assets/mp3/garotoEspecial.mp3'),
                 title: 'Namoral Cansei',
-                artist: 'Tavim MC',
+                artist: 'Tavin MC',
                 artwork: require('../content/assets/garotoEspecial.jpg'),
                 duration: 120                
             },
