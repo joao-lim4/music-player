@@ -1,6 +1,5 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import { Image, StyleSheet, Text, View, Linking, Dimensions } from 'react-native';
-import { RFValue } from "react-native-responsive-fontsize";
 import {  NeuButton } from 'react-native-neu-element';
 
 

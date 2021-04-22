@@ -1,16 +1,18 @@
 import React, { useEffect, useState } from 'react';
-import { Text, Image, StyleSheet, View, Dimensions, TouchableOpacity } from 'react-native';
-import { NeuView, NeuButton } from 'react-native-neu-element';
+import { Text, StyleSheet, View, Dimensions, TouchableOpacity } from 'react-native';
+import { NeuView } from 'react-native-neu-element';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Slider from '@react-native-community/slider';
-import TrackPlayer, { useTrackPlayerProgress } from 'react-native-track-player'
+import TrackPlayer, { useTrackPlayerProgress } from 'react-native-track-player';
 import { RFValue } from "react-native-responsive-fontsize";
+import { useNavigation, CommonActions } from '@react-navigation/native';
 
 
 export default ({props,playAndPause, nextTrack,previusTrack, paused, listMusic}) => {
 
     const [statePaused, setStatePause] = useState({paused: false});
     const {position, duration} = useTrackPlayerProgress();
+    const navigation = useNavigation();
 
     useEffect(() => {
         if(paused){
@@ -32,6 +34,15 @@ export default ({props,playAndPause, nextTrack,previusTrack, paused, listMusic})
         segundos = Math.ceil(resto);
 
         return `${minutos < 10 ? '0' + minutos : minutos}:${segundos < 10 ? '0' + segundos : segundos}`;
+    }
+
+    const redirect = (route, parans={}) => {
+        navigation.dispatch(
+            CommonActions.navigate({
+                name: route,
+                params: parans
+            })
+        )
     }
 
     return (
@@ -73,7 +84,7 @@ export default ({props,playAndPause, nextTrack,previusTrack, paused, listMusic})
                             <Icon name="play-forward"  size={30}/>
                         </TouchableOpacity>
                         {listMusic ? (
-                            <TouchableOpacity style={style.buttonStyle}>
+                            <TouchableOpacity onPress={() => redirect('List')} style={style.buttonStyle}>
                                 <Icon name="menu" size={35} color="#00000090"/>
                             </TouchableOpacity>
                         ) : false

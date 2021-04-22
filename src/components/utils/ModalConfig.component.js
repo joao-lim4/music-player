@@ -1,15 +1,13 @@
-import React,{useRef} from 'react';
+import React from 'react';
 import {
     Text,
     Modal,
     View,
     TouchableOpacity,
     StyleSheet,
-    Switch,
 } from 'react-native';
 import { RFValue } from "react-native-responsive-fontsize";
 import Icon from 'react-native-vector-icons/Ionicons';
-import Carousel from './Carousel.component';
 import Toggle from './Toggle.component';
 
 export default ({props, show, close,listMusic, setListMusics}) => {

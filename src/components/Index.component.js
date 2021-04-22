@@ -1,14 +1,12 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, Image, Alert } from 'react-native';
-import {useNavigation, CommonActions} from '@react-navigation/native';
+import React, { useState, useCallback } from 'react';
+import { View } from 'react-native';
+import { useFocusEffect } from '@react-navigation/native';
 import Style from '../content/css/Index.style';
-import Icon from 'react-native-vector-icons/Ionicons';
 import HeaderComponent from './utils/Header.component';
 import BodyComponent from './utils/Body.component';
 import ControlsComponent from './utils/Painel.component';
 import TrackPlayer from 'react-native-track-player';
 import Data from '../data/Data';
-import TrackPlayerOptions from './utils/TrackPlayerOptions';
 import ModalPerfil from './utils/ModalPerfil.component';
 import ModalConfig from './utils/ModalConfig.component';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -27,67 +25,73 @@ export default props => {
         listMusic: null
     });
 
-    const setPlayerStateInit = async () => {
-        let idTrack = await TrackPlayer.getCurrentTrack();
-
-        for(let i = 0; i < data.length; i++){
-            if(data[i].id == idTrack){
-                setObjectSong(data[i]);
-                setIndexQueue(i);
-                break;
+    const setPlayerStateInit = () => {
+        setTimeout(async () => {
+            let idTrack = await TrackPlayer.getCurrentTrack();
+            for(let i = 0; i < data.length; i++){
+                if(data[i].id == idTrack){
+                    setObjectSong(data[i]);
+                    setIndexQueue(i);
+                    break;
+                }
             }
+        }, 1000);
+    }
+
+    const setOptionsConfig = async () => {
+
+        let list = await AsyncStorage.getItem('listMusic')
+        if(list == null){
+            AsyncStorage.setItem('listMusic', JSON.stringify(true)).then(() => {
+                setCofigs({listMusic: true});
+            });
+        }else{
+            setCofigs({listMusic: JSON.parse(list)});
+        }
+
+    }
+
+    const setStatePlayer = async () => {
+        let state = await TrackPlayer.getState();
+        if(state === TrackPlayer.STATE_PLAYING){
+            setPaused({paused: false });
         }
     }
 
-    useEffect(() => {
-        TrackPlayer.setupPlayer({
-            waitForBuffer: true,
-            
-        }).then(async () => {
-            await TrackPlayer.reset();
-            await TrackPlayer.add(data);
-            setPlayerStateInit()
-            
-            let list = await AsyncStorage.getItem('listMusic')
-            if(list == null){
-                AsyncStorage.setItem('listMusic', JSON.stringify(true)).then(() => {
-                    setCofigs({listMusic: true});
-                });
-            }else{
-                setCofigs({listMusic: JSON.parse(list)});
-            }
+    useFocusEffect(
+        useCallback(() => {
 
-            TrackPlayer.updateOptions(TrackPlayerOptions);
-        });
-        
-        TrackPlayer.addEventListener('playback-track-changed', async trackInfo => {
-            if(trackInfo.nextTrack !== null && trackInfo.track !== null){
-                let queueLen = (await TrackPlayer.getQueue()).length;
-                if(queueLen > indexQueue + 1){  
-                    for(let i = 0; i < data.length; i++){
-                        if(data[i].id == trackInfo.nextTrack){
-                            setObjectSong(data[i]);
-                            setIndexQueue(i);
-                            break;
+            setPlayerStateInit();
+            setOptionsConfig();
+            setStatePlayer();
+           
+    
+            TrackPlayer.addEventListener('playback-track-changed', async trackInfo => {
+                if(trackInfo.nextTrack !== null && trackInfo.track !== null){
+                    let queueLen = (await TrackPlayer.getQueue()).length;
+                    if(queueLen > indexQueue + 1){  
+                        for(let i = 0; i < data.length; i++){
+                            if(data[i].id == trackInfo.nextTrack){
+                                setObjectSong(data[i]);
+                                setIndexQueue(i);
+                                break;
+                            }
                         }
-                    }
-                };
-            }
-        });
+                    };
+                }
+            });
+    
+            TrackPlayer.addEventListener('remote-pause', async () => {
+                setPaused({paused: true });
+            });
+            
+            TrackPlayer.addEventListener('remote-play', async () => {
+                setPaused({paused: false }); 
+            });
+        }, [])
+    );
 
-        TrackPlayer.addEventListener('remote-pause', async () => {
-            setPaused({paused: true });
-        });
-        
-        TrackPlayer.addEventListener('remote-play', async () => {
-            setPaused({paused: false }); 
-        });
-
-
-        return () => {
-            TrackPlayer.destroy();
-        }
-    }, []);
+  
 
 
     const pauseAndPlay = async () => {

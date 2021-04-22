@@ -1,12 +1,11 @@
-import React, {useRef, useState, useEffect} from 'react';
-import Carousel, {ParallaxImage} from 'react-native-snap-carousel';
+import React, { useRef } from 'react';
+import Carousel from 'react-native-snap-carousel';
 import {
   View,
   Dimensions,
   StyleSheet,
-  Platform,
 } from 'react-native';
-import { NeuView, NeuButton } from 'react-native-neu-element';
+import { NeuView } from 'react-native-neu-element';
 import IndexComponent from './carousel/Index.component';
 import SecundComponent from './carousel/secund.component';
 
@@ -17,11 +16,7 @@ const {width: screenWidth} = Dimensions.get('window');
 
 export default  props => {
 
-  const [entries, setEntries] = useState([]);
   const carouselRef = useRef(null);
-  const [index, setIndex] = useState({index: 0});
-
-
 
 
   const renderItem = ({item, index}) => {
@@ -50,7 +45,6 @@ export default  props => {
             data={[0,1]}
             renderItem={renderItem}
             hasParallaxImages={true}
-            onSnapToItem={item => setIndex({index: item})}
         />
 
     </View>
