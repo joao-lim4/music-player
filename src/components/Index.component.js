@@ -9,7 +9,9 @@ import ControlsComponent from './utils/Painel.component';
 import TrackPlayer from 'react-native-track-player';
 import Data from '../data/Data';
 import TrackPlayerOptions from './utils/TrackPlayerOptions';
-import Modal from './utils/Modal.component';
+import ModalPerfil from './utils/ModalPerfil.component';
+import ModalConfig from './utils/ModalConfig.component';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default props => {
     
@@ -17,8 +19,13 @@ export default props => {
     const [paused, setPaused] = useState({paused: true});
     const [objectSong, setObjectSong] = useState(null);
     const [indexQueue, setIndexQueue] = useState(0);
-    const [modal, setModal] = useState({active: false});
-
+    const [modals, setModals] = useState({
+        perfil: false,
+        config: false
+    });
+    const [configs, setCofigs] = useState({
+        listMusic: null
+    });
 
     const setPlayerStateInit = async () => {
         let idTrack = await TrackPlayer.getCurrentTrack();
@@ -41,6 +48,14 @@ export default props => {
             await TrackPlayer.add(data);
             setPlayerStateInit()
             
+            let list = await AsyncStorage.getItem('listMusic')
+            if(list == null){
+                AsyncStorage.setItem('listMusic', JSON.stringify(true)).then(() => {
+                    setCofigs({listMusic: true});
+                });
+            }else{
+                setCofigs({listMusic: JSON.parse(list)});
+            }
 
             TrackPlayer.updateOptions(TrackPlayerOptions);
         });
@@ -59,7 +74,6 @@ export default props => {
                 };
             }
         });
-
 
         TrackPlayer.addEventListener('remote-pause', async () => {
             setPaused({paused: true });
@@ -105,19 +119,38 @@ export default props => {
         }
     }
 
+    const updaTeModal = async (key) => {
+        let cl = {...modals};
+        cl[key] = !cl[key];
+        setModals(cl);
+    }
+
+    const defineListMusic = async () => {
+        let storage = await AsyncStorage.getItem('listMusic');
+        if(storage != null){
+            AsyncStorage.setItem('listMusic', JSON.stringify(JSON.parse(storage) == true ? false : true)).then(() => {
+                setCofigs({listMusic: (JSON.parse(storage) == true ? false : true)});
+            });
+        }else{
+            AsyncStorage.setItem('listMusic', JSON.stringify(!configs.listMusic)).then(() => {
+                setCofigs({listMusic: !configs.listMusic});
+            });
+        }
+    }
 
     return (
         <View style={Style.viewMain}>
-            <Modal show={modal.active} close={() => setModal({active: false})}/>
+            <ModalPerfil show={modals.perfil} close={() => updaTeModal('perfil')}/>
+            <ModalConfig show={modals.config} close={() => updaTeModal('config')} listMusic={configs.listMusic} setListMusics={() => defineListMusic()}/>
             <View style={Style.margins}>
                 <View style={Style.headerMainView}>
-                    <HeaderComponent props={{...props}} openModalDescribe={() => setModal({active: true})}/>
+                    <HeaderComponent props={{...props}} openConfig={() => updaTeModal('config')} openModalDescribe={() => updaTeModal('perfil')}/>
                 </View>
                 <View style={Style.bodyMainView}>
                     <BodyComponent objectSong={objectSong} playIng={paused.paused} props={{...props}}/>
                 </View>
                 <View style={Style.controlsMainView}>
-                    <ControlsComponent playAndPause={() => pauseAndPlay()} nextTrack={() => nextTrack()}  previusTrack={() => previusTrack()}  paused={paused.paused}/>
+                    <ControlsComponent playAndPause={() => pauseAndPlay()} nextTrack={() => nextTrack()}  previusTrack={() => previusTrack()} listMusic={configs.listMusic}  paused={paused.paused}/>
                 </View>
             </View>
         </View>

@@ -7,7 +7,7 @@ import TrackPlayer, { useTrackPlayerProgress } from 'react-native-track-player'
 import { RFValue } from "react-native-responsive-fontsize";
 
 
-export default ({props,playAndPause, nextTrack,previusTrack, paused}) => {
+export default ({props,playAndPause, nextTrack,previusTrack, paused, listMusic}) => {
 
     const [statePaused, setStatePause] = useState({paused: false});
     const {position, duration} = useTrackPlayerProgress();
@@ -18,7 +18,7 @@ export default ({props,playAndPause, nextTrack,previusTrack, paused}) => {
         }else{
             setStatePause({paused: paused});
         }
-    }, [paused]);
+    }, [paused, listMusic]);
 
     // const changeTime = time => {
     //    TrackPlayer.seekTo(time);
@@ -72,9 +72,13 @@ export default ({props,playAndPause, nextTrack,previusTrack, paused}) => {
                         <TouchableOpacity onPress={() => nextTrack()} style={style.buttonStyle}>
                             <Icon name="play-forward"  size={30}/>
                         </TouchableOpacity>
-                        {/* <TouchableOpacity style={style.buttonStyle}>
-                            <Icon name="menu" size={35} color="#00000090"/>
-                        </TouchableOpacity> */}
+                        {listMusic ? (
+                            <TouchableOpacity style={style.buttonStyle}>
+                                <Icon name="menu" size={35} color="#00000090"/>
+                            </TouchableOpacity>
+                        ) : false
+
+                        }
                     </View>
                 </View>
             </NeuView>

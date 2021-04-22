@@ -1,10 +1,10 @@
 import React from 'react';
-import { Text, Image, StyleSheet } from 'react-native';
+import { Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import { NeuView, NeuButton } from 'react-native-neu-element';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { RFValue } from "react-native-responsive-fontsize";
 
-export default ({props,openModalDescribe}) => {
+export default ({props,openModalDescribe, openConfig}) => {
     return (
         <React.Fragment>
             <NeuView
@@ -14,8 +14,10 @@ export default ({props,openModalDescribe}) => {
                 containerStyle={style.containerBoxPerfil}
                 color='#eef2f9'
                 borderRadius={40}
-            >
-                <Image source={require('../../content/assets/lima.jpg')} style={style.fullImage}/>
+            >   
+                <TouchableOpacity onPress={() => openModalDescribe()} style={style.buttonFull}>
+                    <Image source={require('../../content/assets/lima.jpg')} style={style.fullImage}/>
+                </TouchableOpacity>
             </NeuView>
 
             <Text style={style.textTitle}>Escute agora</Text>
@@ -24,12 +26,12 @@ export default ({props,openModalDescribe}) => {
                 width={50}
                 height={50}
                 concave
-                onPress={() => openModalDescribe()}
+                onPress={() => openConfig()}
                 containerStyle={style.containerBoxPerfil}
                 color='#eef2f9'
                 borderRadius={25}
             >
-                <Icon  name="help-outline" size={30} color="#494949"/>
+                <Icon  name="cog" size={30} color="#494949"/>
             </NeuButton>
         </React.Fragment>
     )
@@ -39,6 +41,11 @@ const style = StyleSheet.create({
     containerBoxPerfil: {
         justifyContent: 'center',
         alignItems: 'center'
+    },
+    buttonFull: {
+        width: 70,
+        height: 70,
+        borderRadius: 70 / 2
     },
     fullImage: {
         width:70,
