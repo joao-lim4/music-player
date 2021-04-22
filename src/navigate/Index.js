@@ -13,7 +13,7 @@ export default props => {
     return (
         <UserContext>
             <NavigationContainer>
-                <StatusBar hidden={true} backgroundColor="#eef2f9" />
+                <StatusBar backgroundColor="#eef2f9" barStyle="dark-content"/>
                 <Stack />
             </NavigationContainer>
         </UserContext>
