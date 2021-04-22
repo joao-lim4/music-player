@@ -39,7 +39,7 @@ export default ({props, objectSong, playIng}) => {
     
     const rotateData = rotate.interpolate({
         inputRange: [0, 1],
-        outputRange: ['0deg', '720deg'],
+        outputRange: ['0deg','360deg'],
     });
 
     return (
