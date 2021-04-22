@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import { Image, StyleSheet, Text, View, Linking } from 'react-native';
+import { Image, StyleSheet, Text, View, Linking, Dimensions } from 'react-native';
 import { RFValue } from "react-native-responsive-fontsize";
 import {  NeuButton } from 'react-native-neu-element';
 
@@ -16,8 +16,8 @@ export default props => {
         <View style={style.fullView}>
             <View style={style.margin}>
                 <NeuButton
-                    width={100}
-                    height={100}
+                    width={(((Dimensions.get('window').width * 90) / 100) * 25) / 100}
+                    height={(((Dimensions.get('window').width * 90) / 100) * 25) / 100}
                     concave
                     onPress={() => openLink('https://www.instagram.com/joao_lim4/')}
                     containerStyle={style.container}
@@ -31,8 +31,8 @@ export default props => {
             </View>
             <View style={style.margin}>
                 <NeuButton
-                    width={100}
-                    height={100}
+                    width={(((Dimensions.get('window').width * 90) / 100) * 25) / 100}
+                    height={(((Dimensions.get('window').width * 90) / 100) * 25) / 100}
                     concave
                     onPress={() => Linking.openURL('tel:31989013076')}
                     containerStyle={style.container}
@@ -46,8 +46,8 @@ export default props => {
             </View>
             <View style={style.margin}>
                 <NeuButton
-                    width={100}
-                    height={100}
+                    width={(((Dimensions.get('window').width * 90) / 100) * 25) / 100}
+                    height={(((Dimensions.get('window').width * 90) / 100) * 25) / 100}
                     concave
                     onPress={() => openLink('https://github.com/joao-lim4')}
                     containerStyle={style.container}
