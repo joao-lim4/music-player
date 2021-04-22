@@ -11,5 +11,5 @@ const capabilities = [
 export default {
     stopWithApp: true,
     capabilities: capabilities,
-    compactCapabilities:[TrackPlayer.CAPABILITY_PLAY],
+    compactCapabilities:capabilities,
 };
