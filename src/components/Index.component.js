@@ -114,7 +114,7 @@ export default props => {
                     <HeaderComponent props={{...props}} openModalDescribe={() => setModal({active: true})}/>
                 </View>
                 <View style={Style.bodyMainView}>
-                    <BodyComponent objectSong={objectSong} />
+                    <BodyComponent objectSong={objectSong} playIng={paused.paused} props={{...props}}/>
                 </View>
                 <View style={Style.controlsMainView}>
                     <ControlsComponent playAndPause={() => pauseAndPlay()} nextTrack={() => nextTrack()}  previusTrack={() => previusTrack()}  paused={paused.paused}/>

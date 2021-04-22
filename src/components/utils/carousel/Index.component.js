@@ -58,6 +58,7 @@ const style = StyleSheet.create({
     },
     textView: {
         flex: 1,
+        paddingBottom: 10,
     },
     desc:{ 
         width: '100%',
