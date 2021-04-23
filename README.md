@@ -1,5 +1,5 @@
 <p align="center">
-  <a href="https://github.com/othneildrew/Best-README-Template">
+  <a href="https://github.com/joao-lim4">
     <img src="src/content/assets/logo.png" alt="Logo" width="170" height="110">
   </a>
 
