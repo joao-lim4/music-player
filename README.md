@@ -39,7 +39,7 @@ Inicialmente só tem suporte para Android.
     npm install
    ```
 
-## Configuração da lib Neo
+## Configuração da lib Neu
     No desenvolvimento estava recebendo bastante warn por causa das props passadas para os componentes, como solução eu comentei o código que verifica as props.
 
 1. Dentro da raiz do projeto execute
@@ -154,6 +154,51 @@ Após modificar os arquivos é so rodar o seu app!
 ```sh
     react-native rund-android || npx react-native run-android
 ```
+
+## Erros
+
+Problema na função TrackPlayer.seekTo();
+
+Implementação da funcão no componente
+```js
+    const changeTime = (time /* Time em segundos */) => {
+        TrackPlayer.seekTo(time);
+    }
+
+    Esse parâmetro time é em segundos já é passado automático pelo Slider
+    levando em consideração que ele foi inicializado com 0 e o maxValue é a duração da música
+    Exemplo: Arquivo onde está a função Painel.component.js
+
+
+    const {position, duration} = useTrackPlayerProgress();
+
+    <Slider
+        style={style.slider}
+        minimumValue={0}
+        maximumValue={duration}
+        value={position}
+        thumbTintColor="#000"
+        minimumTrackTintColor="#000000"
+        maximumTrackTintColor="#000000"
+        onSlidingComplete={changeTime}
+    />
+
+    /* Comportamento esperado ao utilizar a função
+    *  Ao clicar no slider a música deveria ir para o time passado como parâmetro na função 
+    * 
+    *  Comportamento inesperado que ocorre ao utilizar a função
+    *  Ao clicar no slider a musica deveria ir para o time passado como parâmetro na função, porém 
+    *  a música acaba resetando e voltando para o início. 
+    */
+ 
+    // o mesmo erro acontece ao implementar o remote-seek
+
+    TrackPlayer.addEventListaner('remote-seek', time => {
+        TrackPlayer.seekTo(time.position);
+    });
+
+```
+
 
 
 ## Contato
