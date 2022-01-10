@@ -22,7 +22,7 @@ Inicialmente só tem suporte para Android.
 * [React-Native-Track-Player](https://react-native-track-player.js.org/documentation/)
 
 
-
+<img src="https://www.linkpicture.com/q/WhatsApp-Image-2022-01-10-at-09.52.52.jpeg" alt="Logo" width="300" height="600" >
 
 ### Installation
 
